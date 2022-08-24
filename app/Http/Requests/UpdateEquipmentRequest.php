@@ -26,7 +26,7 @@ class UpdateEquipmentRequest extends FormRequest
         return [
             'code' => 'string|required|max:10',
             'type_id' => 'int|required',
-            'serial_num' => 'string|unique:equipment|max:25',
+            'serial_num' => 'string|max:25',
             'desc' => 'string|max:300',
         ];
     }

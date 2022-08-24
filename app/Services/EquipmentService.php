@@ -48,7 +48,7 @@ class EquipmentService extends AbstractService
     {
         $equipment->updateOrFail($request->validated());
 
-        return self::apiResponse('Equipment was successfully deleted');
+        return self::apiResponse('Equipment was successfully updated');
     }
 
     public function types(Request $request)
