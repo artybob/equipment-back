@@ -16,7 +16,7 @@ class AuthService extends AbstractService
             'password' => bcrypt($password)
         ]);
 
-        return self::login($email, $password);
+        return self::apiResponse('User created successfully');
     }
 
     public static function login($email, $password)
