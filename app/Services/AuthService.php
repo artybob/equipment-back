@@ -6,7 +6,7 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
-class AuthService
+class AuthService extends AbstractService
 {
     public static function register($email, $name, $password)
     {
@@ -23,21 +23,14 @@ class AuthService
     {
         if (Auth::attempt(['email' => $email, 'password' => $password])) {
             $user = \auth()->user();
-
             $user->tokens()->delete();
-
             $token = $user->createToken("API TOKEN")->plainTextToken;
 
-            return response()->json([
-                'status' => true,
-                'message' => 'User Logged In Successfully',
-                'token' => $token
-            ], 200);
+            return self::apiResponse('User Logged In Successfully', ['token' => $token]);
 
         } else {
-            return response()->json([
-                'message' => 'Invalid login details',
-            ], 401);
+
+            return self::apiResponse('Invalid login details', [], 401);
         }
 
     }

@@ -47,8 +47,8 @@ class EquipmentController extends Controller
         return $this->service->destroy($equipment);
     }
 
-    public function types()
+    public function types(Request $request)
     {
-        return $this->service->types();
+        return $this->service->types($request);
     }
 }

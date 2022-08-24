@@ -10,15 +10,14 @@ use App\Models\Equipment;
 use App\Models\EquipmentType;
 use Illuminate\Http\Request;
 
-class EquipmentService
+class EquipmentService extends AbstractService
 {
     public function index(Request $request): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
     {
-        /**TODO: запросы в model пхп доки сделать */
+        /**TODO:  пхп доки сделать */
         $query = Equipment::select('*');
 
         if($request->search){
-            //поиск по серийному номеру/примечанию.
             $query->where('serial_num', 'like', "%$request->search%");
             $query->orWhere('desc', 'like', "%$request->search%");
         }
@@ -31,7 +30,7 @@ class EquipmentService
     public function store(StoreEquipmentRequest $request)
     {
         $equipment = Equipment::create($request->validated());
-        return new EquipmentResource($equipment);
+        return self::apiResponse('Equipment was successfully created');
     }
 
     public function show(Equipment $equipment)
@@ -42,18 +41,26 @@ class EquipmentService
     public function destroy(Equipment $equipment)
     {
         $equipment->delete();
-        return response()->json('', 200);
+        return self::apiResponse('Equipment was successfully deleted');
     }
 
     public function update(UpdateEquipmentRequest $request, Equipment $equipment)
     {
         $equipment->updateOrFail($request->validated());
 
-        return new EquipmentResource($equipment);
+        return self::apiResponse('Equipment was successfully deleted');
     }
 
-    public function types()
+    public function types(Request $request)
     {
-        return EquipmentTypeResource::collection(EquipmentType::all());
+        $query = EquipmentType::select('*');
+
+        if($request->search){
+            $query->where('type', 'like', "%$request->search%");
+        }
+
+        $equipmentTypes = $query->paginate(5);
+
+        return EquipmentTypeResource::collection($equipmentTypes);
     }
 }

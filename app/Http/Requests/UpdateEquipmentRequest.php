@@ -24,10 +24,10 @@ class UpdateEquipmentRequest extends FormRequest
     public function rules()
     {
         return [
-            'code' => 'string|required',
+            'code' => 'string|required|max:10',
             'type_id' => 'int|required',
-            'serial_num' => 'string|required',
-            'desc' => 'string',
+            'serial_num' => 'string|unique:equipment|max:25',
+            'desc' => 'string|max:300',
         ];
     }
 }
