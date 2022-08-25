@@ -7,17 +7,9 @@
 ## Project Setup
 
 ```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
+composer install
+php artisan migrage --seed
+php artisan key:generate
+check for user in database and login to front or login with api/login
+get token and try api methods
 ```
