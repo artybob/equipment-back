@@ -24,10 +24,10 @@ class StoreEquipmentRequest extends FormRequest
     public function rules()
     {
         return [
-            'code' => 'string|required|max:10',
-            'type_id' => 'int|required',
-            'serial_num' => 'string|unique:equipment|max:25',
-            'desc' => 'string|nullable|max:300',
+            '*.code' => 'required|max:10',
+            '*.type_id' => 'int|required',
+            '*.serial_num' => 'string|unique:equipment|max:25',
+            '*.desc' => 'string|nullable|max:300',
         ];
     }
 }

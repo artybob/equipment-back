@@ -29,9 +29,13 @@ class EquipmentService extends AbstractService
 
     public function store(StoreEquipmentRequest $request)
     {
-        dd($request->validated());
-        $equipment = Equipment::create($request->validated());
-        return self::apiResponse('Equipment was successfully created');
+        $equipmentsToSave  = $request->validated();
+
+        foreach ($equipmentsToSave as $eq) {
+            $equipment = Equipment::create($eq);
+        }
+
+        return self::apiResponse(count($equipmentsToSave).' equipments was successfully created');
     }
 
     public function show(Equipment $equipment)
