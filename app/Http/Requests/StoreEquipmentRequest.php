@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\EquipmentMaskRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreEquipmentRequest extends FormRequest
@@ -25,8 +26,14 @@ class StoreEquipmentRequest extends FormRequest
     {
         return [
             '*.code' => 'required|max:10',
-            '*.type_id' => 'int|required',
-            '*.serial_num' => 'string|unique:equipment|max:25',
+            '*.type_id' => 'required',
+            '*.serial_num' =>
+                ['string',
+                    'unique:equipment',
+                    'max:25',
+                    new EquipmentMaskRule($this->request->all())
+                ]
+            ,
             '*.desc' => 'string|nullable|max:300',
         ];
     }
