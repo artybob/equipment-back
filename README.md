@@ -1,4 +1,4 @@
-# eqi_front2
+# eqi_api
 
 ![img.png](img.png)
 
