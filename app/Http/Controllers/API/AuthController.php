@@ -3,41 +3,56 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
+use App\Http\Resources\UserResource;
 use App\Services\AuthService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-    public function register(Request $request)
+    private AuthService $service;
+
+    public function __construct()
     {
-        $this->validate(request(), [
-            'name' => 'required|unique:users',
-            'email' => 'required|email|unique:users',
-            'password' => 'required'
-        ]);
-
-        return AuthService::register($request->email, $request->name, $request->password);
-
+        $this->service = new AuthService;
     }
 
-    public function login(Request $request)
+    /**
+     * @param RegisterRequest $request
+     * @return JsonResponse
+     */
+    public function register(RegisterRequest $request): JsonResponse
     {
-        $this->validate(request(), [
-            'email' => 'required',
-            'password' => 'required'
-        ]);
-
-       return AuthService::login($request->email, $request->password);
+        return $this->service->register($request->email, $request->name, $request->password);
     }
 
-    public function logout(Request $request)
+    /**
+     * @param LoginRequest $request
+     * @return JsonResponse
+     */
+    public function login(LoginRequest $request): JsonResponse
     {
-        return AuthService::logout($request);
+        return $this->service->login($request->email, $request->password);
     }
 
-    public function me(Request $request)
+    /**
+     * @param Request $request
+     * @return void
+     */
+    public function logout(Request $request): void
     {
-        return AuthService::me();
+        $this->service->logout($request);
+    }
+
+    /**
+     * @param Request $request
+     * @return UserResource
+     */
+    public function me(Request $request): UserResource
+    {
+        return $this->service->me();
     }
 }

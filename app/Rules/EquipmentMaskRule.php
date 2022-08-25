@@ -23,8 +23,6 @@ class EquipmentMaskRule implements InvokableRule, ValidatorAwareRule
      */
     protected $validator;
 
-    // ...
-
     /**
      * Set the current validator.
      *
@@ -38,8 +36,15 @@ class EquipmentMaskRule implements InvokableRule, ValidatorAwareRule
         return $this;
     }
 
-
-    public function __invoke($attribute, $value, $fail)
+    /**
+     * Create a new rule instance.
+     *
+     * @param $attribute
+     * @param $value
+     * @param $fail
+     * @return void
+     */
+    public function __invoke($attribute, $value, $fail): void
     {
         $type_id = $this->validator->getData()[0]['type_id'];
         $et = EquipmentType::findOrFail($type_id)->first();
@@ -49,11 +54,6 @@ class EquipmentMaskRule implements InvokableRule, ValidatorAwareRule
         }
     }
 
-    /**
-     * Create a new rule instance.
-     *
-     * @return void
-     */
 
     public function validateCustom(string $value, string $mask): bool
     {

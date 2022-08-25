@@ -18,7 +18,6 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::apiResource('equipment', EquipmentController::class)->middleware('auth:sanctum');
-
 Route::get('equipment-type', [EquipmentController::class, 'types']);
 
 Route::prefix('auth')->group(function () {

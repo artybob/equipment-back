@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\EquipmentMaskRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreEquipmentRequest extends FormRequest
+class RegisterRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,16 +24,9 @@ class StoreEquipmentRequest extends FormRequest
     public function rules()
     {
         return [
-            '*.code' => 'required|max:10',
-            '*.type_id' => 'required',
-            '*.serial_num' =>
-                ['string',
-                    'unique:equipment',
-                    'max:25',
-                    new EquipmentMaskRule()
-                ]
-            ,
-            '*.desc' => 'string|nullable|max:300',
+            'name' => 'required|unique:users',
+            'email' => 'required|email|unique:users',
+            'password' => 'required'
         ];
     }
 }

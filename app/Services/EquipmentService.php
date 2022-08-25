@@ -8,64 +8,100 @@ use App\Http\Resources\EquipmentResource;
 use App\Http\Resources\EquipmentTypeResource;
 use App\Models\Equipment;
 use App\Models\EquipmentType;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class EquipmentService extends AbstractService
 {
-    public function index(Request $request): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+    /**
+     * show paginated equipment list witch optional search in serial_num and desc
+     *
+     * @param Request $request
+     * @return AnonymousResourceCollection
+     */
+    public function index(Request $request): AnonymousResourceCollection
     {
-        /**TODO:  пхп доки сделать */
+
         $query = Equipment::select('*');
 
-        if($request->search){
+        if ($request->search) {
             $query->where('serial_num', 'like', "%$request->search%");
             $query->orWhere('desc', 'like', "%$request->search%");
         }
 
-        $equipments = $query->paginate(5);
-
-        return EquipmentResource::collection($equipments);
+        return EquipmentResource::collection($query->paginate(5));
     }
 
-    public function store(StoreEquipmentRequest $request)
+    /**
+     * save new equipments... needs array can save one or many
+     *
+     * @param StoreEquipmentRequest $request
+     * @return JsonResponse
+     */
+    public function store(StoreEquipmentRequest $request): JsonResponse
     {
-        $equipmentsToSave  = $request->validated();
+        $equipmentsToSave = $request->validated();
 
         foreach ($equipmentsToSave as $eq) {
             $equipment = Equipment::create($eq);
         }
 
-        return self::apiResponse(count($equipmentsToSave).' equipments was successfully created');
+        return self::apiResponse(count($equipmentsToSave) . ' equipments was successfully created');
     }
 
-    public function show(Equipment $equipment)
+    /**
+     * show single equipment
+     *
+     * @param Equipment $equipment
+     * @return EquipmentResource
+     */
+    public function show(Equipment $equipment): EquipmentResource
     {
         return new EquipmentResource($equipment);
     }
 
-    public function destroy(Equipment $equipment)
+    /**
+     * delete equipment
+     *
+     * @param Equipment $equipment
+     * @return JsonResponse
+     */
+    public function destroy(Equipment $equipment): JsonResponse
     {
         $equipment->delete();
         return self::apiResponse('Equipment was successfully deleted');
     }
 
-    public function update(UpdateEquipmentRequest $request, Equipment $equipment)
+    /**
+     * update equipment
+     *
+     * @param UpdateEquipmentRequest $request
+     * @param Equipment $equipment
+     * @return JsonResponse
+     * @throws \Throwable
+     */
+    public function update(UpdateEquipmentRequest $request, Equipment $equipment): JsonResponse
     {
         $equipment->updateOrFail($request->validated());
 
         return self::apiResponse('Equipment was successfully updated');
     }
 
-    public function types(Request $request)
+    /**
+     * show equipment types with optional type
+     *
+     * @param Request $request
+     * @return AnonymousResourceCollection
+     */
+    public function types(Request $request): AnonymousResourceCollection
     {
         $query = EquipmentType::select('*');
 
-        if($request->search){
+        if ($request->search) {
             $query->where('type', 'like', "%$request->search%");
         }
 
-        $equipmentTypes = $query->paginate(5);
-
-        return EquipmentTypeResource::collection($equipmentTypes);
+        return EquipmentTypeResource::collection($query->paginate(5));
     }
 }

@@ -10,7 +10,7 @@ class EquipmentResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
     public function toArray($request)
@@ -24,7 +24,7 @@ class EquipmentResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'type' => $this->when($this->type_id, function () {
-                    return new EquipmentTypeResource($this->type);
+                return new EquipmentTypeResource($this->type);
             }),
         ];
     }

@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 
 class EquipmentController extends Controller
 {
-    private $service;
+    private EquipmentService $service;
 
     public function __construct()
     {
