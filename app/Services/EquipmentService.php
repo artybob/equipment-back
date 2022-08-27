@@ -22,7 +22,6 @@ class EquipmentService extends AbstractService
      */
     public function index(Request $request): AnonymousResourceCollection
     {
-
         $query = Equipment::select('*');
 
         if ($request->search) {
